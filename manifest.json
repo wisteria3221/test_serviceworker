@@ -2,11 +2,11 @@
 	"name": "ServiceWOrker Test",
 	"short_name": "SW Test",
 	"icons": [{
-		"src": "/icon_192x192.png",
+		"src": "/test_serviceworker/icon_192x192.png",
 		"sizes": "192x192",
 		"type": "image/png"
 	}],
-	"start_url": "/index.html",
+	"start_url": "/test_serviceworker/index.html",
 	"display": "standalone",
 	"gcm_sender_id": "serviceworkertest-1102"
 }

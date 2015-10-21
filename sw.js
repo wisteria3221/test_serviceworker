@@ -15,7 +15,7 @@ self.addEventListener("push", function(e) {
 	e.waitUntil(
 		self.registration.showNotification("Push Notification Title", {
 			body: "(・∀・)",
-			icon: "/icon_192x192.png",
+			icon: "/test_serviceworker/icon_192x192.png",
 			tag: "push-notification-tag"
 		})
 	);
