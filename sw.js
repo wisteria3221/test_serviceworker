@@ -1,10 +1,21 @@
+// installイベント
+self.addEventListener('install', function(e) {
+	console.info('>>>>> onInstall <<<<<')
+});
+
+// activateイベント
+self.addEventListener('activate', function(e) {
+	console.info('>>>>> onActivate <<<<<')
+});
+
+// pushイベント
 self.addEventListener("push", function(e) {
-	console.log("onPush");
+	console.info('>>>>> onPush <<<<<')
 
 	e.waitUntil(
 		self.registration.showNotification("Push Notification Title", {
 			body: "(・∀・)",
-			icon: "http://placehold.it/192x192",
+			icon: "/icon_192x192.png",
 			tag: "push-notification-tag"
 		})
 	);

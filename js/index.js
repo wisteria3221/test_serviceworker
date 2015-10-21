@@ -7,7 +7,7 @@
 			console.log('ServiceWorker registration successful with scope: ', registration.scope);
 		}).catch(function(err) {
 			// 登録失敗
-			console.log('ServiceWorker registration failed: ', err);
+			console.warn('ServiceWorker registration failed: ', err);
 		});
 	}
 })();
