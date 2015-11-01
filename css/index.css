@@ -22,6 +22,10 @@ header h1 {
 	width: 100%;
 }
 
+.resultSection p.errorMessage {
+	color: #f00;
+}
+
 .buttonSection {
 	width: 100%;
 	text-align: center;

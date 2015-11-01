@@ -21,9 +21,23 @@
 		// ServiceWorkerがサポートされている場合Push通知サポートを追加し、
 		// サポートされていない場合処理をせずに続行
 		if ("serviceWorker" in navigator) {
-			navigator.serviceWorker.register("./sw.js").then(initialiseState);
+			navigator.serviceWorker.register("./sw.js").then(function(registration) {
+				// 登録成功
+				var message = "ServiceWorker registration successful with scope: " + registration.scope;
+				console.log(message);
+				showResultMessage(message);
+
+				initialiseState();
+			}).catch(function(error) {
+				// 登録失敗
+				var message = "ServiceWorker registration failed: " + error;
+				console.warn(message);
+				showResultMessage(message, true);
+			});
 		} else {
-			console.warn("Service workers aren't supported in this browser.");
+			var message = "Service workers aren't supported in this browser.";
+			console.warn(message);
+			showResultMessage(message, true);
 		}
 	});
 
@@ -31,7 +45,9 @@
 	function initialiseState() {
 		// Are Notifications supported in the service worker?
 		if (!("showNotification" in ServiceWorkerRegistration.prototype)) {
-			console.warn("Notifications aren't supported.");
+			var message = "Notifications aren't supported.";
+			console.warn(message);
+			showResultMessage(message, true);
 			return;
 		}
 
@@ -39,13 +55,17 @@
 		// If its denied, it's a permanent block until the
 		// user changes the permission
 		if (Notification.permission === "denied") {
-			console.warn("The user has blocked notifications.");
+			var message = "The user has blocked notifications.";
+			console.warn(message);
+			showResultMessage(message, true);
 			return;
 		}
 
 		// Check if push messaging is supported
 		if (!("PushManager" in window)) {
-			console.warn("Push messaging isn't supported.");
+			var message = "Push messaging isn't supported.";
+			console.warn(message);
+			showResultMessage(message, true);
 			return;
 		}
 
@@ -69,8 +89,10 @@
 				// Set your UI to show they have subscribed for push messages
 				pushButton.text("Disable Push Messages");
 				isPushEnabled = true;
-			}).catch(function(err) {
-				console.warn("Error during getSubscription()", err);
+			}).catch(function(error) {
+				var message = "Error during getSubscription()" + error;
+				console.warn(message);
+				showResultMessage(message, true);
 			});
 		});
 	}
@@ -93,19 +115,25 @@
 				// TODO: Send the subscription.endpoint to your server
 				// and save it to send a push message at a later date
 				// return sendSubscriptionToServer(subscription);
-			}).catch(function(e) {
+			}).catch(function(error) {
 				if (Notification.permission === "denied") {
 					// The user denied the notification permission which
 					// means we failed to subscribe and the user will need
 					// to manually change the notification permission to
 					// subscribe to push messages
-					console.warn("Permission for Notifications was denied");
+					var message = "Permission for Notifications was denied";
+					console.warn(message);
+					showResultMessage(message, true);
+
 					pushButton.prop("disabled", true);
 				} else {
 					// A problem occurred with the subscription; common reasons
 					// include network errors, and lacking gcm_sender_id and/or
 					// gcm_user_visible_only in the manifest.
-					console.error("Unable to subscribe to push.", e);
+					var message = "Unable to subscribe to push." + error;
+					console.warn(message);
+					showResultMessage(message, true);
+
 					pushButton.prop("disabled", false);
 					pushButton.text("Enable Push Messages");
 				}
@@ -212,5 +240,17 @@
 			alert("ブラウザが \"Push API\" に対応していません");
 			return;
 		}
+	}
+
+	function showResultMessage(message, isError) {
+		var $messageElement = null;
+
+		$messageElement = $("<p></p>");
+		if (isError) {
+			$messageElement.addClass("errorMessage");
+		}
+
+		$messageElement.text(message);
+		$("#result").append($messageElement);
 	}
 })();
