@@ -6,3 +6,15 @@ body {
 	margin: 0;
 	padding: 0;
 }
+
+header {
+	width: 100%;
+}
+
+.resultSection {
+	width: 100%;
+}
+
+.buttonSection {
+	width: 100%;
+}
