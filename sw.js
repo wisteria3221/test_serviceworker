@@ -13,7 +13,7 @@ self.addEventListener("push", function(event) {
 	console.info(">>>>> onPush <<<<<")
 
 	var title = "ServiceWorker Test";
-	var body = "メッセージを受信しました。<br>";
+	var body = "メッセージを受信しました。";
 	var icon = "/test_serviceworker/webAppIcon_192x192.png"
 	var tag = "push-notification-tag";
 

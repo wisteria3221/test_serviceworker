@@ -75,6 +75,7 @@
 			serviceWorkerRegistration.pushManager.getSubscription().then(function(subscription) {
 				// Push通知のsubscribes / unsubscripes のUIを有効化
 				var pushButton = $("#register");
+				pushButton.text("Enable Push Messages");
 				pushButton.prop("disabled", false);
 
 				if (!subscription) {
