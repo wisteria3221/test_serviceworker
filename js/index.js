@@ -31,7 +31,7 @@
 			}).catch(function(error) {
 				// 登録失敗
 				var message = "ServiceWorker registration failed: " + error;
-				console.warn(message);
+				console.error(message);
 				showResultMessage(message, true);
 			});
 		} else {
@@ -83,7 +83,12 @@
 					return;
 				}
 
-				console.dir(subscription);
+				var endpointParts = subscription.endpoint.split("/");
+				var registrationId = endpointParts[endpointParts.length - 1];
+
+				var message = "RegistrationId: " + registrationId;
+				console.info(message);
+				showResultMessage(message);
 
 				// Keep your server in sync with the latest subscriptionId
 				// sendSubscriptionToServer(subscription);
@@ -93,7 +98,7 @@
 				isPushEnabled = true;
 			}).catch(function(error) {
 				var message = "Error during getSubscription()" + error;
-				console.warn(message);
+				console.error(message);
 				showResultMessage(message, true);
 			});
 		});
@@ -114,7 +119,12 @@
 				pushButton.text("Disable Push Messages");
 				pushButton.prop("disabled", false);
 
-				console.dir(subscription);
+				var endpointParts = subscription.endpoint.split("/");
+				var registrationId = endpointParts[endpointParts.length - 1];
+
+				var message = "RegistrationId: " + registrationId;
+				console.info(message);
+				showResultMessage(message);
 
 				// TODO: Send the subscription.endpoint to your server
 				// and save it to send a push message at a later date
@@ -149,10 +159,10 @@
 		var pushButton = $("#register");
 		pushButton.prop("disabled", true);
 
-		navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+		navigator.serviceWorker.ready.then(function(registration) {
 			// To unsubscribe from push messaging, you need get the
 			// subscription object, which you can call unsubscribe() on.
-			serviceWorkerRegistration.pushManager.getSubscription().then(function(pushSubscription) {
+			registration.pushManager.getSubscription().then(function(pushSubscription) {
 				// Check we have a subscription to unsubscribe
 				if (!pushSubscription) {
 					// No subscription object, so set the state
@@ -168,23 +178,32 @@
 				// the subscriptionId from your data store so you
 				// don't attempt to send them push messages anymore
 
+				var message = "SubscriptionId: " + subscriptionId;
+				console.info(message);
+				showResultMessage(message);
+
 				// We have a subscription, so call unsubscribe on it
 				pushSubscription.unsubscribe().then(function(successful) {
 					pushButton.prop("disabled", false);
 					pushButton.text("Enable Push Messages");
 					isPushEnabled = false;
-				}).catch(function(e) {
+				}).catch(function(error) {
 					// We failed to unsubscribe, this can lead to
 					// an unusual state, so may be best to remove
 					// the users data from your data store and
 					// inform the user that you have done so
 
-					console.log("Unsubscription error: ", e);
+					var message = "Unsubscription error: " + error;
+					console.log(message);
+					showResultMessage(message);
+
 					pushButton.prop("disabled", false);
 					pushButton.text("Enable Push Messages");
 				});
-			}).catch(function(e) {
-				console.error("Error thrown while unsubscribing from push messaging.", e);
+			}).catch(function(error) {
+				var message = "Error thrown while unsubscribing from push messaging." + error;
+				console.error(message);
+				showResultMessage(message);
 			});
 		});
 	}

@@ -1,9 +1,17 @@
 {
-	"name": "ServiceWOrker Test",
+	"name": "ServiceWorker Test",
 	"short_name": "SW Test",
 	"icons": [{
-		"src": "/test_serviceworker/icon_192x192.png",
+		"src": "/test_serviceworker/webAppIcon_144x144.png",
+		"sizes": "144x144",
+		"type": "image/png"
+	}, {
+		"src": "/test_serviceworker/webAppIcon_192x192.png",
 		"sizes": "192x192",
+		"type": "image/png"
+	}, {
+		"src": "/test_serviceworker/webAppIcon_256x256.png",
+		"sizes": "256x256",
 		"type": "image/png"
 	}],
 	"start_url": "/test_serviceworker/index.html",

@@ -12,10 +12,10 @@ self.addEventListener("activate", function(event) {
 self.addEventListener("push", function(event) {
 	console.info(">>>>> onPush <<<<<")
 
-	var title = "Yay a message.";
-	var body = "We have received a push message.";
-	var icon = "/test_serviceworker/icon_192x192.png"
-	var tag = "simple-push-demo-notification-tag";
+	var title = "ServiceWorker Test";
+	var body = "メッセージを受信しました。<br>";
+	var icon = "/test_serviceworker/webAppIcon_192x192.png"
+	var tag = "push-notification-tag";
 
 	event.waitUntil(
 		self.registration.showNotification(title, {
