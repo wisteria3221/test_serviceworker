@@ -21,7 +21,7 @@
 		// ServiceWorkerがサポートされている場合Push通知サポートを追加し、
 		// サポートされていない場合処理をせずに続行
 		if ("serviceWorker" in navigator) {
-			navigator.serviceWorker.register("../sw.js").then(initialiseState);
+			navigator.serviceWorker.register("./sw.js").then(initialiseState);
 		} else {
 			console.warn("Service workers aren't supported in this browser.");
 		}
