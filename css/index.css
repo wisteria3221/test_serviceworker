@@ -11,10 +11,26 @@ header {
 	width: 100%;
 }
 
+header h1 {
+	margin: 0;
+	padding: 5px 10px;
+	font-size: 24px;
+	text-align: center;
+}
+
 .resultSection {
 	width: 100%;
 }
 
 .buttonSection {
 	width: 100%;
+	text-align: center;
+}
+
+.buttonSection button {
+	width: 90%;
+	padding: 5px 10px;
+	box-sizing: border-box;
+	border-radius: 8px;
+	background-color: #ddd;
 }
