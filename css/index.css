@@ -22,6 +22,11 @@ header h1 {
 	width: 100%;
 }
 
+.resultSection p {
+	word-wrap: break-word;
+	font-size: 12px;
+}
+
 .resultSection p.errorMessage {
 	color: #f00;
 }
