@@ -1,15 +1,15 @@
 // installイベント
-self.addEventListener("install", function(e) {
+self.addEventListener("install", function(event) {
 	console.info(">>>>> onInstall <<<<<")
 });
 
 // activateイベント
-self.addEventListener("activate", function(e) {
+self.addEventListener("activate", function(event) {
 	console.info(">>>>> onActivate <<<<<")
 });
 
 // pushイベント
-self.addEventListener("push", function(e) {
+self.addEventListener("push", function(event) {
 	console.info(">>>>> onPush <<<<<")
 
 	var title = "Yay a message.";

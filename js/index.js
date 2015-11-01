@@ -83,6 +83,8 @@
 					return;
 				}
 
+				console.dir(subscription);
+
 				// Keep your server in sync with the latest subscriptionId
 				// sendSubscriptionToServer(subscription);
 
