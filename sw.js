@@ -1,3 +1,6 @@
+// GCM URL
+var GCM_URL = "https://android.googleapis.com/gcm/send/";
+
 // installイベント
 self.addEventListener("install", function(event) {
 	console.info(">>>>> onInstall <<<<<")
@@ -11,6 +14,7 @@ self.addEventListener("activate", function(event) {
 // fetchイベント
 self.addEventListener("activate", function(event) {
 	console.info(">>>>> onFetch <<<<<")
+	console.dir(event);
 });
 
 // pushイベント
