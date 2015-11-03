@@ -28,6 +28,11 @@
 			}
 		});
 
+		// Pushメッセージリクエストボタンのクリック処理
+		$("#pushRequest").on("click", function() {
+			requestPushMessages();
+		});
+
 		// ServiceWorkerがサポートされている場合Push通知サポートを追加し、
 		// サポートされていない場合処理をせずに続行
 		if ("serviceWorker" in navigator) {
@@ -195,6 +200,8 @@
 					pushButton.text(BUTTON_VALUE_ENABLE_PUSH_MESSAGES);
 					return;
 				}
+
+				console.dir(pushSubscription);
 
 				var subscriptionId = pushSubscription.subscriptionId;
 				// TODO: Make a request to your server to remove
