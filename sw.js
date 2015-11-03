@@ -12,7 +12,7 @@ self.addEventListener("activate", function(event) {
 });
 
 // fetchイベント
-self.addEventListener("activate", function(event) {
+self.addEventListener("fetch", function(event) {
 	console.info(">>>>> onFetch <<<<<")
 	console.dir(event);
 });
