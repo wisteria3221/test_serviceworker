@@ -54,7 +54,7 @@
 	// ServiceWorkerが登録された時、初期状態を設定
 	function initialiseState() {
 		// Are Notifications supported in the service worker?
-		if (!("showNotification" in registration.prototype)) {
+		if (!("showNotification" in ServiceWorkerRegistration.prototype)) {
 			var message = "Notifications aren't supported.";
 			console.warn(message);
 			showResultMessage(message, true);
