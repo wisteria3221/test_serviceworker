@@ -16,7 +16,7 @@
 	var BUTTON_VALUE_DISABLE_PUSH_MESSAGES = "Push解除";
 
 	// Pushメッセージのリクエスト先URL
-	var PUSH_MESSAGES_REQUEST_URL = "/requestpushmessages/";
+	var PUSH_MESSAGES_REQUEST_URL = "/test_serviceworker/requestpushmessages/";
 
 	$(document).ready(function() {
 		// Push通知登録ボタンクリック処理
