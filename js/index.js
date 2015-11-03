@@ -8,6 +8,16 @@
 
 	var isPushEnabled = false;
 
+	// Push登録ID
+	var registrationId = null;
+
+	// Push登録/解除ボタンに表示する文字列
+	var BUTTON_VALUE_ENABLE_PUSH_MESSAGES = "Push登録";
+	var BUTTON_VALUE_DISABLE_PUSH_MESSAGES = "Push解除";
+
+	// Pushメッセージのリクエスト先URL
+	var PUSH_MESSAGES_REQUEST_URL = "https://android.googleapis.com/gcm/send/";
+
 	$(document).ready(function() {
 		// Push通知登録ボタンクリック処理
 		$("#register").on("click", function() {
@@ -44,7 +54,7 @@
 	// ServiceWorkerが登録された時、初期状態を設定
 	function initialiseState() {
 		// Are Notifications supported in the service worker?
-		if (!("showNotification" in ServiceWorkerRegistration.prototype)) {
+		if (!("showNotification" in registration.prototype)) {
 			var message = "Notifications aren't supported.";
 			console.warn(message);
 			showResultMessage(message, true);
@@ -70,22 +80,26 @@
 		}
 
 		// サブスクリプションを確認するためにはServiceWorkerの登録が必要
-		navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+		navigator.serviceWorker.ready.then(function(registration) {
 			// Push通知のサブスクリプションを持っているか
-			serviceWorkerRegistration.pushManager.getSubscription().then(function(subscription) {
-				// Push通知のsubscribes / unsubscripes のUIを有効化
+			registration.pushManager.getSubscription().then(function(subscription) {
+				// Push登録/解除ボタンを取得
 				var pushButton = $("#register");
-				pushButton.text("Enable Push Messages");
+
+				// Push登録ボタンに変更し、ボタンを有効化
+				pushButton.text(BUTTON_VALUE_ENABLE_PUSH_MESSAGES);
 				pushButton.prop("disabled", false);
 
+				// Pushが登録されていない場合、そのまま処理終了
 				if (!subscription) {
-					// Pushが予約されていない場合、
-					// Pushを有効化できるようにUIを設定
 					return;
 				}
 
+				isPushEnabled = true;
+
+				// Push登録IDを取得
 				var endpointParts = subscription.endpoint.split("/");
-				var registrationId = endpointParts[endpointParts.length - 1];
+				registrationId = endpointParts[endpointParts.length - 1];
 
 				var message = "RegistrationId: " + registrationId;
 				console.info(message);
@@ -94,9 +108,8 @@
 				// Keep your server in sync with the latest subscriptionId
 				// sendSubscriptionToServer(subscription);
 
-				// Set your UI to show they have subscribed for push messages
-				pushButton.text("Disable Push Messages");
-				isPushEnabled = true;
+				// Push解除ボタンに変更
+				pushButton.text(BUTTON_VALUE_DISABLE_PUSH_MESSAGES);
 			}).catch(function(error) {
 				var message = "Error during getSubscription()" + error;
 				console.error(message);
@@ -108,20 +121,25 @@
 	function subscribe() {
 		// Disable the button so it can't be changed while
 		// we process the permission request
+		// Push登録/解除ボタンを取得
 		var pushButton = $("#register");
+
+		// Push登録ボタンを無効化
 		pushButton.prop("disabled", true);
 
-		navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
-			serviceWorkerRegistration.pushManager.subscribe({
+		navigator.serviceWorker.ready.then(function(registration) {
+			registration.pushManager.subscribe({
 				userVisibleOnly: true
 			}).then(function(subscription) {
-				// The subscription was successful
 				isPushEnabled = true;
-				pushButton.text("Disable Push Messages");
+
+				// Push解除ボタンに変更し、ボタンを有効化
+				pushButton.text(BUTTON_VALUE_DISABLE_PUSH_MESSAGES);
 				pushButton.prop("disabled", false);
 
+				// Push登録IDを取得
 				var endpointParts = subscription.endpoint.split("/");
-				var registrationId = endpointParts[endpointParts.length - 1];
+				registrationId = endpointParts[endpointParts.length - 1];
 
 				var message = "RegistrationId: " + registrationId;
 				console.info(message);
@@ -149,15 +167,19 @@
 					console.warn(message);
 					showResultMessage(message, true);
 
+					// Push登録ボタンに変更し、ボタンを有効化
+					pushButton.text(BUTTON_VALUE_ENABLE_PUSH_MESSAGES);
 					pushButton.prop("disabled", false);
-					pushButton.text("Enable Push Messages");
 				}
 			});
 		});
 	}
 
 	function unsubscribe() {
+		// Push登録/解除ボタンを取得
 		var pushButton = $("#register");
+
+		// Push解除ボタンを無効化
 		pushButton.prop("disabled", true);
 
 		navigator.serviceWorker.ready.then(function(registration) {
@@ -170,7 +192,7 @@
 					// to allow the user to subscribe to push
 					isPushEnabled = false;
 					pushButton.prop("disabled", false);
-					pushButton.text("Enable Push Messages");
+					pushButton.text(BUTTON_VALUE_ENABLE_PUSH_MESSAGES);
 					return;
 				}
 
@@ -186,7 +208,7 @@
 				// We have a subscription, so call unsubscribe on it
 				pushSubscription.unsubscribe().then(function(successful) {
 					pushButton.prop("disabled", false);
-					pushButton.text("Enable Push Messages");
+					pushButton.text(BUTTON_VALUE_ENABLE_PUSH_MESSAGES);
 					isPushEnabled = false;
 				}).catch(function(error) {
 					// We failed to unsubscribe, this can lead to
@@ -199,13 +221,28 @@
 					showResultMessage(message);
 
 					pushButton.prop("disabled", false);
-					pushButton.text("Enable Push Messages");
+					pushButton.text(BUTTON_VALUE_ENABLE_PUSH_MESSAGES);
 				});
 			}).catch(function(error) {
 				var message = "Error thrown while unsubscribing from push messaging." + error;
 				console.error(message);
 				showResultMessage(message);
 			});
+		});
+	}
+
+	function requestPushMessages() {
+		var postData = "{\"registration_ids\":[\"" + registrationId + "\"]}"
+		$.ajax({
+			type: "POST",
+			url: PUSH_MESSAGES_REQUEST_URL,
+			data: postData,
+			success: function(message) {
+				console.log(message);
+			},
+			error: function(message) {
+				console.log("request error.");
+			}
 		});
 	}
 
