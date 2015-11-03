@@ -8,6 +8,11 @@ self.addEventListener("activate", function(event) {
 	console.info(">>>>> onActivate <<<<<")
 });
 
+// fetchイベント
+self.addEventListener("activate", function(event) {
+	console.info(">>>>> onFetch <<<<<")
+});
+
 // pushイベント
 self.addEventListener("push", function(event) {
 	console.info(">>>>> onPush <<<<<")
